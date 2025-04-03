@@ -1,0 +1,44 @@
+#time complexity - O(N2) - TLE
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        int n = nums.size();
+        for(int i=0; i<n-1; i++){
+            for(int j=i+1; j<n; j++){
+                if(nums[i] == nums[j]) return true;
+            }
+        }
+        return false;
+    }
+};
+
+#time complexity - O(N)
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for(int i=0; i<n-1; i++){
+            if(nums[i] == nums[i+1]) return true;
+        }
+        return false;
+    }
+};
+
+Python3
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        nums.sort()
+        for i in range(len(nums)-1):
+            if nums[i] == nums[i+1]: return True
+        return False
+
+
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+#seen is a set that keeps track of the numbers already encountered in the list to detect if any duplicates exist.        
+        seen = set()
+        for i in nums:
+            if i in seen: return True
+            seen.add(i)
+        return False
