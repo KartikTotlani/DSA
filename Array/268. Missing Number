@@ -1,0 +1,33 @@
+Time complexity - O(N)
+class Solution{
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i=0; i<n; i++){
+            if (nums[i] != i) return i;
+        }
+        return n;
+        //because we want in range [0, n]
+        /* if arr = [5,6,8].. missing shd be 7(output) but since we want in range [0,n] we will chk from [0, 8] and 1st missing will be 0 
+    }
+};
+
+class Solution{
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        int exp_ans = (n*(n+1))/2;
+        int ans = 0;
+        for (int i=0; i<n; i++){
+            ans +=  nums[i];
+        }
+        int res = exp_ans - ans;
+        return res;
+    }
+};
+//The missing number will be the difference between the expected sum of numbers (from 0 to n) and the actual sum of the numbers in the array.
+
+Python - 
+
