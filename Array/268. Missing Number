@@ -30,6 +30,7 @@ public:
 //The missing number will be the difference between the expected sum of numbers (from 0 to n) and the actual sum of the numbers in the array.
 
 Python - 
+Time complexity - O(Nlogn) as sorting in python is of TC Nlogn
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
         nums.sort()
@@ -38,6 +39,7 @@ class Solution:
             if v == len(nums)-1: return v+1
 
 
+Time complexity - O(N)
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
         nums.sort()
