@@ -1,0 +1,183 @@
+Python3 - 
+//Time complexity - O(N) 
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        seen_uniq = set(nums) #seen_uniq contains only unique elements of array
+        res = []
+        for i in range(1, len(nums)+1): #desr says to iterate from (1,n)
+            if i not in seen_uniq: res.append(i)
+        return res
+
+C++
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        //sort(nums.begin(), nums.end()); - adds up O(Nlogn) complexity avoid this
+        unordered_set<int> seen_uniq(nums.begin(), nums.end());
+        // Create the set with unique elements from the sorted nums
+        vector<int> res;
+        int n = nums.size();
+
+        for (int i=1; i<=n; i++){
+            if(seen_uniq.find(i) == seen_uniq.end()){ // If i is not found in the set
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};
+
+
+The code you've provided is an **optimal solution** for finding the missing numbers in an array, and it operates in **O(n)** time complexity and **O(1)** additional space complexity.
+
+### Explanation of the Code:
+
+#### Problem:
+Given an array `nums` of size `n` containing integers from `1` to `n`, some numbers might be missing, and some numbers may appear more than once. The goal is to return a list of all the numbers from `1` to `n` that are **missing** from the array.
+
+#### Solution Breakdown:
+
+```python
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        # First loop to mark the indices corresponding to the values in nums
+        for i in range(len(nums)):
+            temp = abs(nums[i]) - 1  # Get the index (corresponding to the number)
+            if nums[temp] > 0:  # If the number at that index is positive
+                nums[temp] *= -1  # Mark it as visited (by making it negative)
+
+        res = []  # Result array to store missing numbers
+        for i, n in enumerate(nums):
+            if n > 0:  # If the value at index `i` is still positive
+                res.append(i + 1)  # That means the number `i+1` was missing
+
+        return res  # Return the missing numbers
+```
+
+### How It Works:
+
+1. **Marking the visited numbers**:
+   - In the first loop, we iterate through the `nums` array.
+   - For each number `nums[i]`, we calculate the **index** `temp = abs(nums[i]) - 1`, where the number `nums[i]` corresponds to the index `temp`.
+     - We use the `abs(nums[i])` because the number could have been modified in a previous iteration (it could be negative).
+   - Then, we check if the number at index `temp` is positive (`nums[temp] > 0`).
+     - If it is positive, we mark it by multiplying `nums[temp]` by `-1` (making it negative).
+     - This marks the fact that the number corresponding to `temp + 1` has appeared in the array.
+
+2. **Identifying missing numbers**:
+   - In the second loop, we again iterate through the `nums` array.
+   - If a number at index `i` is **positive**, it means that the number `i+1` was **missing** from the array because we never marked it as visited (we never made `nums[i]` negative).
+   - We append these missing numbers (`i + 1`) to the `res` array.
+
+3. **Returning the result**:
+   - After completing the loop, `res` contains all the missing numbers from `1` to `n`, which are then returned.
+
+### Key Observations:
+- **In-place modifications**: The solution modifies the `nums` array in place (by changing values to negative) and does not require extra space for a set or another array for tracking the numbers. This makes the solution **space-efficient**.
+  
+- **Time complexity**: The solution iterates through the array twice (once for marking and once for collecting the results), so the time complexity is **O(n)**, where `n` is the length of the input array.
+
+- **Space complexity**: Since the solution doesn't use any extra data structures other than a few variables and modifies the array in place, the space complexity is **O(1)** (excluding the space required for the output list).
+
+### Example:
+
+Let's take an example input and walk through it:
+
+#### Input:
+```python
+nums = [4, 3, 2, 7, 8, 2, 3, 1]
+```
+
+#### Step-by-step process:
+
+1. **First loop** (marking visited numbers):
+   - Iteration 1: `temp = abs(4) - 1 = 3` → `nums[3] = 7` becomes `-7` → Array becomes: `[4, 3, 2, -7, 8, 2, 3, 1]`
+   - Iteration 2: `temp = abs(3) - 1 = 2` → `nums[2] = 2` becomes `-2` → Array becomes: `[4, 3, -2, -7, 8, 2, 3, 1]`
+   - Iteration 3: `temp = abs(-2) - 1 = 1` → `nums[1] = 3` becomes `-3` → Array becomes: `[4, -3, -2, -7, 8, 2, 3, 1]`
+   - Iteration 4: `temp = abs(-7) - 1 = 6` → `nums[6] = 3` becomes `-3` → Array becomes: `[4, -3, -2, -7, 8, 2, -3, 1]`
+   - And so on for the rest of the array.
+
+2. **Second loop** (finding missing numbers):
+   - We check if the number at each index is positive. If it is, the corresponding number is missing.
+   - Numbers 5, 6, and 7 are missing, so we append these to the result.
+
+#### Output:
+```python
+res = [5, 6, 7]
+```
+
+### Conclusion:
+
+- **Time Complexity**: **O(n)** because we iterate through the list twice.
+- **Space Complexity**: **O(1)** because we use the input list itself to track the missing numbers and do not use extra space except for the result list.
+
+This solution is both **time-efficient** and **space-efficient** for this problem.
+
+
+Example Walkthrough:
+Let’s walk through an example to see how this works:
+
+Input:
+python
+Copy
+nums = [4, 3, 2, 7, 8, 2, 3, 1]
+Iteration 1 (i = 0):
+nums[0] = 4
+
+temp = abs(nums[0]) - 1 = abs(4) - 1 = 3
+
+We look at index 3 (which corresponds to the number 4).
+
+nums[3] = 7 is positive, so we mark it by multiplying nums[3] by -1.
+
+The array becomes: [4, 3, 2, -7, 8, 2, 3, 1]
+
+Iteration 2 (i = 1):
+nums[1] = 3
+
+temp = abs(nums[1]) - 1 = abs(3) - 1 = 2
+
+We look at index 2 (which corresponds to the number 3).
+
+nums[2] = 2 is positive, so we mark it by multiplying nums[2] by -1.
+
+The array becomes: [4, 3, -2, -7, 8, 2, 3, 1]
+
+Iteration 3 (i = 2):
+nums[2] = -2
+
+temp = abs(nums[2]) - 1 = abs(-2) - 1 = 1
+
+We look at index 1 (which corresponds to the number 2).
+
+nums[1] = 3 is positive, so we mark it by multiplying nums[1] by -1.
+
+The array becomes: [4, -3, -2, -7, 8, 2, 3, 1]
+
+Iteration 4 (i = 3):
+nums[3] = -7
+
+temp = abs(nums[3]) - 1 = abs(-7) - 1 = 6
+
+We look at index 6 (which corresponds to the number 7).
+
+nums[6] = 3 is positive, so we mark it by multiplying nums[6] by -1.
+
+The array becomes: [4, -3, -2, -7, 8, 2, -3, 1]
+
+Iteration 5 (i = 4):
+nums[4] = 8
+
+temp = abs(nums[4]) - 1 = abs(8) - 1 = 7
+
+We look at index 7 (which corresponds to the number 8).
+
+nums[7] = 1 is positive, so we mark it by multiplying nums[7] by -1.
+
+The array becomes: [4, -3, -2, -7, 8, 2, -3, -1]
+
+Further Iterations:
+The remaining iterations will continue marking indices for other numbers, and we’ll finish with the array showing which numbers are present.
+
+After these steps, the missing numbers are identified by checking which indices remain positive. For each positive value at an index i, the missing number is i + 1.
+
