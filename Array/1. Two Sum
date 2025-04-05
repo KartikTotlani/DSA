@@ -1,0 +1,85 @@
+Time Complexity - O(N^2)
+class Solution{
+public:
+    vector<int> twoSum(vector<int>& nums, int target){
+        int n = nums.size();
+        for (int i=0; i<n-1; i++){
+            for (int j=i+1; j<n; j++){
+                if (nums[i] + nums[j] == target){
+                    return {i,j};
+                }
+            }
+        }
+        return {};
+    }
+};
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)-1):
+            for j in range(i+1, len(nums)):
+                if (nums[i] + nums[j] == target): 
+                    return [i,j]
+        return []
+
+moving towards O(N) - 
+firtsly, tried 
+class Solution{
+public:
+    vector<int> twoSum(vector<int>& nums, int target){
+        int n = nums.size();
+        for (int i=0; i<n-1; i++){
+            int chk = target - nums[i];
+            for (int j=i+1; j<n; j++){
+                if(nums[j] == chk){
+                    return {i,j};
+                }
+            }
+        }
+        return {};
+    }
+};
+
+next, using set
+class Solution{
+public:
+    vector<int> twoSum(vector<int>& nums, int target){
+        int n = nums.size();
+        unordered_set<int> seen;
+        for (int i=0; i<n; i++){
+            int chk = target - nums[i];
+            if(seen.find(chk) != seen.end()){
+                return {i, static_cast<int>(find(nums.begin(), nums.end(), chk) - nums.begin())};
+            }
+            seen.insert(nums[i]);
+        }
+        return {};
+    }
+};
+
+using hash map
+class Solution{
+public:
+    vector<int> twoSum(vector<int>& nums, int target){
+        int n = nums.size();
+        unordered_map<int, int> map;
+        for (int i=0; i<n; i++){
+            int chk = target - nums[i];
+            if(map.find(chk) != map.end()){
+                return {i, map[chk]};
+            }
+            map[nums[i]] = i;
+        }
+        return {};
+    }
+};
+
+Python3 - hash map/dict
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        hash_map = {} #index, val
+        for i,v in enumerate(nums):
+            if target-v in hash_map:
+                return i, hash_map[target-v]
+            else:
+                hash_map[v] =i
