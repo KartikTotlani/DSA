@@ -3,7 +3,7 @@ class Solution {
 public:
     vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
         int n = nums.size();
-        vector<int> res(n,0);
+        vector<int> res(n,0);  //expression vector<int> res(n, 0) initializes the result vector res with n elements, all set to 0.
         for (int i=0; i<n; i++){
             int count=0;
             for(int j=0; j<n; j++){
@@ -14,3 +14,28 @@ public:
         return res;
     }
 };
+
+class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        res = []
+        for i in range(len(nums)):
+            count =0
+            for j in range(len(nums)):
+                if(nums[i] > nums[j]): count +=1
+            res.append(count)
+        return res
+
+
+Time Complexity - O(N)
+class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        temp = sorted(nums)
+        d ={}
+        for i,num in enumerate(temp):
+            if num not in d:
+                d[num]=i
+        res =[]
+        for i in nums:
+            res.append(d[i])
+        return res
+
