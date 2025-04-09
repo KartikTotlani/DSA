@@ -1,0 +1,84 @@
+Time Complexity: O(n)
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        // Using unordered_set to store unique numbers
+        unordered_set<int> uniq; 
+
+        // Iterate through all numbers in nums
+        for(int i : nums){
+            // If the number is smaller than k, return -1 immediately
+            if(i < k) return -1;
+            
+            // If the number is greater than k, insert it into the set
+            if(i > k) uniq.insert(i);
+        }
+        
+        // Return the size of the set, which represents unique elements > k
+        return uniq.size();
+    }
+};
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        // Using unordered_map to store the frequency of numbers greater than k
+        unordered_map<int, int> uniq;
+
+        // Iterate through all numbers in nums
+        for(int i : nums){
+            // If the number is smaller than k, return -1 immediately
+            if(i < k) return -1;
+            
+            // If the number is greater than k, increment its count in the map
+            if(i > k) uniq[i]++;
+        }
+        
+        // Return the number of unique numbers greater than k
+        return uniq.size();
+    }
+};
+
+
+Key Differences Between the Two Codes:
+Data Structure Used:
+Code 1 uses an unordered_set<int>, which only stores unique values. It automatically handles duplicates by ignoring them.
+Code 2 uses an unordered_map<int, int>, which stores each number as a key and its count as a value. Although you're not using the count, it's still stored in the map.
+
+Memory Usage:
+Code 1 only stores the unique numbers greater than k.
+Code 2 stores the numbers and their counts, leading to potentially higher memory usage, although in this specific problem, the value (int) is not being used, so the memory usage is similar in practice.
+
+Use of the Count:
+Code 1 only tracks the unique numbers greater than k without any extra information.
+Code 2 tracks the count of occurrences of each unique number greater than k, but the count is not used, making it slightly less efficient in this specific case.
+
+Performance:
+Code 1 might have slightly better performance as it doesn't need to store the count values in the map, which means less memory overhead.
+Code 2 may perform similarly, but it has the overhead of managing an extra value (the count), even though it's not used.
+
+Return Values:
+Both codes return the count of unique numbers greater than k from the collection, so the result is identical in terms of the final outcome.
+
+Time Complexity Comparison:
+Code 1 (unordered_set):
+Insertion into the set: O(1) on average.
+Looping through nums: O(n), where n is the length of the array.
+Total Complexity: O(n).
+
+Code 2 (unordered_map):
+Insertion into the map: O(1) on average.
+Looping through nums: O(n).
+Total Complexity: O(n).
+
+Both codes have O(n) time complexity, where n is the size of the nums array. The difference in time complexity is minimal for this case since both operations have constant-time insertions and lookups.
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        uniq = set()
+        for i in nums:
+            if i<k : return -1
+            if i>k : uniq.add(i)
+        return len(uniq)
+
+        
