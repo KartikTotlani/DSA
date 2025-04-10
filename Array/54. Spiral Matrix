@@ -1,0 +1,92 @@
+Time Complexity - O(N)
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        res = []  # This will store the final spiral order result
+
+        # Loop continues until the matrix becomes empty
+        while matrix:
+            # Step 1: Take the first row (left to right) and add to result
+            res += matrix.pop(0)
+
+            # Step 2: Take the last element from each of the remaining rows (top to bottom)
+            if matrix and matrix[0]:
+                for row in matrix:
+                    res.append(row.pop())
+
+            # Step 3: Take the last row (right to left)
+            if matrix:
+                res += matrix.pop()[::-1]
+
+            # Step 4: Take the first element from each of the remaining rows (bottom to top)
+            if matrix and matrix[0]:
+                for row in matrix[::-1]:
+                    res.append(row.pop(0))
+
+        return res
+
+
+Step-by-Step Example Walkthrough:
+Initial Matrix:
+[
+ [1, 2, 3],
+ [4, 5, 6],
+ [7, 8, 9]
+]
+res = []
+
+1. matrix.pop(0) → top row:
+[1, 2, 3]  → added to res
+res = [1, 2, 3]
+
+Matrix becomes:
+[
+ [4, 5, 6],
+ [7, 8, 9]
+]
+
+2. Last column from top to bottom:
+matrix[0].pop() → 6  
+matrix[1].pop() → 9
+res = [1, 2, 3, 6, 9]
+
+Matrix becomes:
+[
+ [4, 5],
+ [7, 8]
+]
+
+3. Bottom row (reversed):
+matrix.pop() → [7, 8] → reversed → [8, 7]
+res = [1, 2, 3, 6, 9, 8, 7]
+
+Matrix becomes:
+[
+ [4, 5]
+]
+
+4. First column from bottom to top:
+
+matrix[0].pop(0) → 4
+res = [1, 2, 3, 6, 9, 8, 7, 4]
+
+Matrix becomes:
+[
+ [5]
+]
+
+Loop continues…
+1. matrix.pop(0):
+[5] → added to res
+res = [1, 2, 3, 6, 9, 8, 7, 4, 5]
+
+Matrix becomes: []
+Loop ends.
+
+Final Output:
+[1, 2, 3, 6, 9, 8, 7, 4, 5]
+In Summary, the spiral goes in this order:
+Top row (→)
+Right column (↓)
+Bottom row (←)
+Left column (↑)
+Repeat inner spiral if any
