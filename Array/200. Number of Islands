@@ -1,0 +1,172 @@
+This function counts the number of islands in a 2D grid. An island is a group of '1's (land) connected horizontally or vertically, and surrounded by '0's (water).
+It uses BFS (Breadth-First Search) to traverse each island and keeps track of visited land cells so that they are not counted again.
+
+Time Complexity - O(n*m)   [n= no. of rows, m=no. of columns]
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:  # Edge case: empty grid
+            return 0
+
+        # Helper function to perform BFS starting from (r, c)
+        def bfs(r, c):
+            q = deque()
+            visit.add((r, c))  # Mark starting cell as visited
+            q.append((r, c))
+
+            while q:
+                row, col = q.popleft()
+                # Directions: down, up, right, left
+                directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+
+                for dr, dc in directions:
+                    nr, nc = row + dr, col + dc  # New row and column
+                    # Check if within bounds, is land ('1'), and not visited
+                    if (
+                        nr in range(rows)
+                        and nc in range(cols)
+                        and grid[nr][nc] == '1'
+                        and (nr, nc) not in visit
+                    ):
+                        q.append((nr, nc))
+                        visit.add((nr, nc))  # Mark neighbor as visited
+
+        count = 0
+        rows = len(grid)
+        cols = len(grid[0])
+        visit = set()  # To store visited coordinates
+
+        # Traverse each cell in the grid
+        for r in range(rows):
+            for c in range(cols):
+                # If it's land and not visited, it's a new island
+                if grid[r][c] == '1' and (r, c) not in visit:
+                    bfs(r, c)  # Visit all connected land
+                    count += 1  # Increment island count
+
+        return count
+
+
+
+Example Walthro - 
+
+Input Grid:
+grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Visual Map (Row x Column Indexes):
+(0,0) (0,1) (0,2) (0,3) (0,4)
+(1,0) (1,1) (1,2) (1,3) (1,4)
+(2,0) (2,1) (2,2) (2,3) (2,4)
+(3,0) (3,1) (3,2) (3,3) (3,4)
+
+Variable Initialization:
+rows = 4          # number of rows
+cols = 5          # number of columns
+visit = set()     # empty set to keep track of visited land cells
+count = 0         # final island count
+
+Now loop through every cell:
+(0,0) → grid[0][0] = '1' and not visited
+- Start BFS from here.
+- Add (0,0) to `visit`, initialize queue: `q = deque([(0,0)])`
+
+BFS Steps:
+- Pop (0,0)
+  - Check 4 directions:
+    - (1,0) → '1' → Add to `visit`, queue
+    - (0,1) → '1' → Add to `visit`, queue
+- Pop (1,0)
+  - Check:
+    - (1,1) → '1' → Add to `visit`, queue
+- Pop (0,1)
+- Pop (1,1)
+
+Done exploring this cluster → one island completed.
+count = 1
+
+Visited set so far:  
+visit = {(0,0), (0,1), (1,0), (1,1)}
+
+(0,1) to (1,1): Already visited → skip
+(0,2), (0,3), (0,4), (1,2)...(2,1): All are '0' or visited → skip
+
+(2,2) → grid[2][2] = '1' and not visited
+- Start new BFS
+- Add (2,2) to visit and queue
+
+BFS Steps:
+- Pop (2,2)
+  - All directions → no other '1's
+Done → second island
+count = 2
+visit = {..., (2,2)}
+
+(3,3) → grid[3][3] = '1' and not visited
+- Start BFS
+- Add (3,3) to visit and queue
+
+BFS Steps:
+- Pop (3,3)
+  - Check → (3,4) is '1' → Add to visit, queue
+- Pop (3,4)
+third island
+count = 3
+visit = {..., (3,3), (3,4)}
+
+ Final Step: Loop continues...
+All other cells are either `'0'` or visited, so BFS is not called again.
+
+ Final Output:
+
+return 3  # Total islands found
+
+
+
+C++
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        if(grid.empty()) return 0;
+        int rows = grid.size();
+        int cols = grid[0].size();
+        unordered_set<string> visited; 
+        int count = 0;
+
+        vector<pair<int, int>> directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == '1' && visited.find(to_string(r) + "," + to_string(c)) == visited.end()) {
+                    count++;
+                    bfs(grid, r, c, visited, directions, rows, cols);
+                }
+            }
+        }
+
+        return count;        
+    }
+
+    private:
+    void bfs(vector<vector<char>>& grid, int r, int c, unordered_set<string>& visited, vector<pair<int, int>>& directions, int rows, int cols) {
+        queue<pair<int, int>> q;
+        visited.insert(to_string(r) + "," + to_string(c));
+        q.push({r, c});
+
+        while (!q.empty()) {
+            auto [row, col] = q.front();
+            q.pop();
+
+            for (auto [dr, dc] : directions) {
+                int nr = row + dr;
+                int nc = col + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == '1' && visited.find(to_string(nr) + "," + to_string(nc)) == visited.end()) {
+                    q.push({nr, nc});
+                    visited.insert(to_string(nr) + "," + to_string(nc));
+                }
+            }
+        }
+    }
+};
