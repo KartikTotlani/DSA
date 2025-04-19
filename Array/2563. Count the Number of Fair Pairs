@@ -1,0 +1,49 @@
+TC - O(n2) -- TLE
+class Solution {
+public:
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        int n = nums.size();
+        int count =0;
+        //lower <= nums[i] + nums[j] <= upper
+        for (int i=0; i<n-1; i++){
+            for(int j=i+1; j<n; j++){
+                int chk = nums[i] + nums[j];
+                if(lower <= chk && chk <= upper) count++;
+            }
+        } 
+        return count;
+    }
+};
+
+TC - O(N logn)
+class Solution {
+public:
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        sort(nums.begin(), nums.end());
+        //nums = [0,1,4,4,5,7]
+        int n = nums.size();
+        long long count =0;
+
+        //lower <= nums[i] + nums[j] <= upper
+        for (int i=0; i<n-1; i++){
+            //create window
+            //convert the range condition to a condition on nums[j]
+            // We're looking for: lower - nums[i] <= nums[j] <= upper - nums[i]
+            int left = lower - nums[i];
+            int right = upper - nums[i];
+            //left = 3, right = 6
+
+// Use binary search to find how many nums[j] (j > i) fall in [left, right]
+// lower_bound gives the first position where nums[j] >= left
+// upper_bound gives the first position where nums[j] > right
+
+//[l, r) is the valid range
+            int l = lower_bound(nums.begin() + i + 1, nums.end(), left) - nums.begin();
+            int r = upper_bound(nums.begin() + i + 1, nums.end(), right) - nums.begin();
+
+// Add the count of valid j's for current i
+            count += r - l;
+        } 
+        return count;
+    }
+};
